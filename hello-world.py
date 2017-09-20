@@ -5,7 +5,7 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 
 
-DATABASE=os.path.join(app.root_path, 'test.db')
+DATABASE = 'test.db'
 SECRET_KEY=b'\xfeF4\x01\x06\xed\xc6\x88+\x06\x97j\x0f\x93\xdd\x1b\xb7\xb1\xcchVKum'
 USERNAME='admin'
 PASSWORD='password'
