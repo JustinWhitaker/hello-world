@@ -6,9 +6,9 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 
 
 DATABASE = 'test.db'
-SECRET_KEY=b'\xfeF4\x01\x06\xed\xc6\x88+\x06\x97j\x0f\x93\xdd\x1b\xb7\xb1\xcchVKum'
-USERNAME='admin'
-PASSWORD='password'
+SECRET_KEY = b'\xfeF4\x01\x06\xed\xc6\x88+\x06\x97j\x0f\x93\xdd\x1b\xb7\xb1\xcchVKum'
+USERNAME = 'admin'
+PASSWORD = 'password'
 
 
 app = Flask(__name__)
@@ -54,13 +54,15 @@ def close_db(error):
         g.sqlite_db.close()
 
 
-@app.route("/initdb")
+@app.route('/initdb')
 def initdb_command():
     """Creates the database tables."""
     init_db()
+    flash('Database initialized!')
+    return redirect(url_for('show_entries'))
 
 
-@app.route("/")
+@app.route('/')
 def show_entries():
     rv = query_db('select title, text from entries order by id desc')
     return render_template('show_entries.html', entries=rv)
@@ -100,5 +102,5 @@ def logout():
     return redirect(url_for('show_entries'))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run()
