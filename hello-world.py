@@ -4,15 +4,15 @@ import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 
-app = Flask(__name__)
 
-# Load default config and override config from an environment variable
-app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'test.db'),
-    SECRET_KEY='@.\x7f\xb2\xc0\xa4\x87\x1fD!\xcc{\xd8=\x92\xae\xda\xebd\xe0\xcc-\xc5Q',
-    USERNAME='admin',
-    PASSWORD='password'
-))
+DATABASE=os.path.join(app.root_path, 'test.db')
+SECRET_KEY=b'\xfeF4\x01\x06\xed\xc6\x88+\x06\x97j\x0f\x93\xdd\x1b\xb7\xb1\xcchVKum'
+USERNAME='admin'
+PASSWORD='password'
+
+
+app = Flask(__name__)
+app.config.from_object(__name__)
 
 
 def init_db():
@@ -20,7 +20,6 @@ def init_db():
     with app.open_resource('schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
     db.commit()
-    print('Initialized the database.')
 
 
 def get_db():
@@ -40,6 +39,7 @@ def connect_db():
 
 
 def query_db(query, args=(), one=False):
+    """Queries the database and returns a list of dictionaries."""
     db = get_db()
     cur = db.execute(query, args)
     rv = cur.fetchall()
@@ -54,10 +54,10 @@ def close_db(error):
         g.sqlite_db.close()
 
 
-@app.route('/initdb')
-def initdb():
+@app.route("/initdb")
+def initdb_command():
+    """Creates the database tables."""
     init_db()
-    return 'OK'
 
 
 @app.route("/")
