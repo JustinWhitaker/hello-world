@@ -57,6 +57,8 @@ def close_db(error):
 @app.route('/initdb')
 def initdb_command():
     """Creates the database tables."""
+    if not session.get('logged_in'):
+        abort(401)
     init_db()
     flash('Database initialized!')
     return redirect(url_for('show_entries'))
